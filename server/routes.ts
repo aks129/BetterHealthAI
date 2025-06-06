@@ -38,8 +38,24 @@ async function ensureUploadDir() {
   }
 }
 
+// Get provider coordinates based on their addresses (using San Francisco area coordinates)
+function getProviderCoordinates(providerId: number): { lat: number, lng: number } {
+  const coordinates: Record<number, { lat: number, lng: number }> = {
+    1: { lat: 37.7749, lng: -122.4194 }, // Dr. Sarah Chen - San Francisco General Area
+    2: { lat: 37.7849, lng: -122.4094 }, // Dr. Michael Rodriguez - Near Union Square
+    3: { lat: 37.7649, lng: -122.4294 }, // Dr. Emily Johnson - Near Mission District
+    4: { lat: 37.7949, lng: -122.3994 }, // Dr. James Wilson - Near Financial District
+    5: { lat: 37.7549, lng: -122.4394 }, // Dr. Lisa Park - Near Castro District
+  };
+  
+  return coordinates[providerId] || { lat: 37.7749, lng: -122.4194 };
+}
+
 export async function registerRoutes(app: Express): Promise<Server> {
   await ensureUploadDir();
+
+  // Google Maps configuration
+  app.get("/api/google-maps-config", getGoogleMapsConfig);
 
   // Health Inquiries
   app.get("/api/health-inquiries", async (req, res) => {
@@ -121,7 +137,35 @@ This appears to be a serious medical condition that requires immediate professio
   app.post("/api/health-providers/search", async (req, res) => {
     try {
       const searchParams = providerSearchSchema.parse(req.body);
-      const providers = await storage.searchHealthProviders(searchParams);
+      let providers = await storage.searchHealthProviders(searchParams);
+      
+      // If location is provided, calculate distances and sort by proximity
+      if (searchParams.location) {
+        const userLocation = await geocodeAddress(searchParams.location);
+        
+        if (userLocation) {
+          // Add real distance calculations for each provider
+          providers = providers.map(provider => {
+            // Sample coordinates for demonstration - in real app these would come from provider addresses
+            const providerCoords = getProviderCoordinates(provider.id);
+            const distance = calculateDistance(
+              userLocation.lat, userLocation.lng,
+              providerCoords.lat, providerCoords.lng
+            );
+            
+            return {
+              ...provider,
+              distance: `${distance} miles away`,
+              coordinates: providerCoords
+            };
+          }).sort((a, b) => {
+            const distA = parseFloat(a.distance.split(' ')[0]);
+            const distB = parseFloat(b.distance.split(' ')[0]);
+            return distA - distB;
+          });
+        }
+      }
+      
       res.json(providers);
     } catch (error) {
       if (error instanceof Error) {

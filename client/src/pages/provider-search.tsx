@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useMutation } from "@tanstack/react-query";
@@ -8,9 +8,11 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ProviderCard } from "@/components/provider-card";
+import { useToast } from "@/hooks/use-toast";
+import { useGeocoding } from "@/hooks/use-google-maps";
 import { apiRequest } from "@/lib/queryClient";
 import { providerSearchSchema, type ProviderSearch, type HealthProvider } from "@shared/schema";
-import { Search, MapPin, Stethoscope, CreditCard } from "lucide-react";
+import { Search, MapPin, Stethoscope, CreditCard, Navigation } from "lucide-react";
 
 export default function ProviderSearch() {
   const [searchResults, setSearchResults] = useState<HealthProvider[]>([]);
