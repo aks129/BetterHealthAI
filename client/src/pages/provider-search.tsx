@@ -17,6 +17,9 @@ import { Search, MapPin, Stethoscope, CreditCard, Navigation } from "lucide-reac
 export default function ProviderSearch() {
   const [searchResults, setSearchResults] = useState<HealthProvider[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
+  const [isUsingCurrentLocation, setIsUsingCurrentLocation] = useState(false);
+  const { toast } = useToast();
+  const { getCurrentLocation, geocodeAddress, isLoaded } = useGeocoding();
 
   const form = useForm<ProviderSearch>({
     resolver: zodResolver(providerSearchSchema),
@@ -28,7 +31,7 @@ export default function ProviderSearch() {
     },
   });
 
-  const { data: allProviders } = useQuery({
+  const { data: allProviders } = useQuery<HealthProvider[]>({
     queryKey: ["/api/health-providers"],
   });
 
@@ -53,7 +56,63 @@ export default function ProviderSearch() {
     searchMutation.mutate(searchData);
   };
 
-  const displayProviders = hasSearched ? searchResults : (allProviders || []);
+  const handleUseCurrentLocation = async () => {
+    if (!isLoaded) {
+      toast({
+        title: "Location services not ready",
+        description: "Please wait for location services to load and try again.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsUsingCurrentLocation(true);
+    try {
+      const location = await getCurrentLocation();
+      if (location) {
+        // Use the geocoding service from our backend
+        const response = await apiRequest("POST", "/api/reverse-geocode", {
+          lat: location.lat,
+          lng: location.lng
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          if (data.results && data.results[0]) {
+            const address = data.results[0].formatted_address;
+            form.setValue("location", address);
+            toast({
+              title: "Location detected",
+              description: `Using your current location: ${address}`,
+            });
+          }
+        } else {
+          // Fall back to coordinates
+          form.setValue("location", `${location.lat},${location.lng}`);
+          toast({
+            title: "Location detected",
+            description: "Using your current coordinates for search",
+          });
+        }
+      } else {
+        toast({
+          title: "Location access denied",
+          description: "Please enter your location manually or enable location services.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Location error",
+        description: "Could not access your location. Please enter it manually.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUsingCurrentLocation(false);
+    }
+  };
+
+  const displayProviders: HealthProvider[] = hasSearched ? searchResults : (Array.isArray(allProviders) ? allProviders : []);
 
   const specialties = [
     "Primary Care",
@@ -148,9 +207,25 @@ export default function ProviderSearch() {
                           <MapPin className="h-4 w-4 mr-1" />
                           Location
                         </FormLabel>
-                        <FormControl>
-                          <Input placeholder="City, State or ZIP" {...field} />
-                        </FormControl>
+                        <div className="flex gap-2">
+                          <FormControl>
+                            <Input placeholder="City, State or ZIP" {...field} />
+                          </FormControl>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="icon"
+                            onClick={handleUseCurrentLocation}
+                            disabled={isUsingCurrentLocation || !isLoaded}
+                            title="Use current location"
+                          >
+                            {isUsingCurrentLocation ? (
+                              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary" />
+                            ) : (
+                              <Navigation className="h-4 w-4" />
+                            )}
+                          </Button>
+                        </div>
                         <FormMessage />
                       </FormItem>
                     )}

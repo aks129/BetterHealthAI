@@ -57,6 +57,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Google Maps configuration
   app.get("/api/google-maps-config", getGoogleMapsConfig);
 
+  // Reverse geocoding endpoint
+  app.post("/api/reverse-geocode", async (req, res) => {
+    try {
+      const { lat, lng } = req.body;
+      
+      if (!lat || !lng) {
+        return res.status(400).json({ error: "Latitude and longitude are required" });
+      }
+
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${process.env.GOOGLE_MAPS_API_KEY}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Geocoding request failed");
+      }
+
+      const data = await response.json();
+      res.json(data);
+    } catch (error) {
+      console.error("Reverse geocoding error:", error);
+      res.status(500).json({ error: "Failed to reverse geocode location" });
+    }
+  });
+
   // Health Inquiries
   app.get("/api/health-inquiries", async (req, res) => {
     try {
