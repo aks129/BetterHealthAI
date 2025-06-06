@@ -42,7 +42,13 @@ export default function ProviderSearch() {
   });
 
   const onSubmit = (data: ProviderSearch) => {
-    searchMutation.mutate(data);
+    // Convert "all" values to empty strings for backend processing
+    const searchData = {
+      ...data,
+      specialty: data.specialty === "all" ? "" : data.specialty,
+      insurance: data.insurance === "all" ? "" : data.insurance,
+    };
+    searchMutation.mutate(searchData);
   };
 
   const displayProviders = hasSearched ? searchResults : (allProviders || []);
@@ -118,7 +124,7 @@ export default function ProviderSearch() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="">All Specialties</SelectItem>
+                            <SelectItem value="all">All Specialties</SelectItem>
                             {specialties.map((specialty) => (
                               <SelectItem key={specialty} value={specialty}>
                                 {specialty}
@@ -164,7 +170,7 @@ export default function ProviderSearch() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="">All Insurance</SelectItem>
+                            <SelectItem value="all">All Insurance</SelectItem>
                             {insuranceOptions.map((insurance) => (
                               <SelectItem key={insurance} value={insurance}>
                                 {insurance}

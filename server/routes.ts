@@ -7,6 +7,7 @@ import {
   insertHealthInquirySchema,
   insertHealthDocumentSchema
 } from "@shared/schema";
+import { getGoogleMapsConfig, geocodeAddress, calculateDistance } from "./google-maps";
 import multer from "multer";
 import path from "path";
 import fs from "fs/promises";
