@@ -79,7 +79,7 @@ export default function ResearchPanel() {
         }}
       >
         <div>
-          <div className="text-[10px] uppercase tracking-[0.5em] text-gray-500 mb-1">Research Directory</div>
+          <div className="text-xs sm:text-[10px] uppercase tracking-[0.5em] text-gray-500 mb-1">Research Directory</div>
           <h2 className="text-xl font-bold tracking-wider text-cyan-300">Technology Tree</h2>
         </div>
 
@@ -110,7 +110,7 @@ export default function ResearchPanel() {
           {selectedTechId && (
             <button
               onClick={confirmResearch}
-              className="px-5 py-2 text-xs uppercase tracking-wider font-bold cursor-pointer transition-all duration-200"
+              className="px-5 py-2 min-h-[44px] text-xs uppercase tracking-wider font-bold cursor-pointer transition-all duration-200 active:scale-95"
               style={{
                 background: `${factionColor}22`,
                 border: `1px solid ${factionColor}`,
@@ -124,7 +124,7 @@ export default function ResearchPanel() {
 
           <button
             onClick={() => dispatch({ type: 'SET_PHASE', payload: 'playing' })}
-            className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-cyan-400 transition-colors cursor-pointer border border-gray-700 hover:border-cyan-700 rounded"
+            className="w-10 h-10 flex items-center justify-center text-gray-500 hover:text-cyan-400 active:text-cyan-400 transition-colors cursor-pointer border border-gray-700 hover:border-cyan-700 rounded"
           >
             ✕
           </button>
@@ -136,19 +136,19 @@ export default function ResearchPanel() {
         {(Object.keys(CATEGORY_COLORS) as TechCategory[]).map((cat) => (
           <div key={cat} className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-sm" style={{ background: CATEGORY_COLORS[cat] }} />
-            <span className="text-[10px] uppercase tracking-widest text-gray-400">{CATEGORY_LABELS[cat]}</span>
+            <span className="text-xs sm:text-[10px] uppercase tracking-widest text-gray-400">{CATEGORY_LABELS[cat]}</span>
           </div>
         ))}
       </div>
 
       {/* Tech tree - scrollable */}
       <div className="flex-1 overflow-auto p-8">
-        <div className="min-w-[900px]">
+        <div className="w-full">
           {[1, 2, 3, 4].map((tier) => {
             const techs = tierGroups[tier] || [];
             return (
               <div key={tier} className="mb-8">
-                <div className="text-[10px] uppercase tracking-[0.5em] text-gray-600 mb-4 pl-2">
+                <div className="text-xs uppercase tracking-[0.5em] text-gray-600 mb-4 pl-2">
                   Tier {tier}
                 </div>
                 <div className="flex flex-wrap gap-4">
@@ -168,7 +168,8 @@ export default function ResearchPanel() {
                         onMouseLeave={() => setHoveredTech(null)}
                         className="relative transition-all duration-300"
                         style={{
-                          width: `${NODE_WIDTH}px`,
+                          width: '100%',
+                          maxWidth: `${NODE_WIDTH}px`,
                           cursor: available ? 'pointer' : 'default',
                           opacity: researched ? 0.5 : available ? 1 : 0.25,
                         }}

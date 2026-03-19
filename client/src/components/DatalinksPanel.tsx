@@ -87,7 +87,7 @@ export default function DatalinksPanel() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search database..."
-              className="w-64 px-4 py-1.5 text-xs bg-gray-900/50 border border-gray-700/50 rounded text-gray-300 placeholder-gray-600 focus:outline-none focus:border-cyan-700/50 font-mono"
+              className="w-full max-w-[256px] px-4 py-1.5 text-xs bg-gray-900/50 border border-gray-700/50 rounded text-gray-300 placeholder-gray-600 focus:outline-none focus:border-cyan-700/50 font-mono"
               style={{ boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.3)' }}
             />
             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 text-xs">
@@ -98,7 +98,7 @@ export default function DatalinksPanel() {
 
         <button
           onClick={() => dispatch({ type: 'SET_PHASE', payload: gameState.phase === 'datalinks' ? 'title' : 'playing' })}
-          className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-cyan-400 transition-colors cursor-pointer border border-gray-700 hover:border-cyan-700 rounded"
+          className="w-10 h-10 flex items-center justify-center text-gray-500 hover:text-cyan-400 active:text-cyan-400 transition-colors cursor-pointer border border-gray-700 hover:border-cyan-700 rounded"
         >
           ✕
         </button>
@@ -128,10 +128,10 @@ export default function DatalinksPanel() {
       </div>
 
       {/* Content */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex flex-col sm:flex-row overflow-hidden">
         {/* List */}
         <div
-          className="w-96 flex-shrink-0 overflow-y-auto border-r border-gray-800/30"
+          className="w-full sm:w-96 flex-shrink-0 overflow-y-auto border-b sm:border-b-0 sm:border-r border-gray-800/30"
           style={{ background: 'rgba(0,0,0,0.2)' }}
         >
           {activeTab === 'technologies' && (

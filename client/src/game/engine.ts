@@ -69,11 +69,33 @@ export function createNewGame(playerFactionId: string, mapSize: 'small' | 'mediu
       map[nr]?.[nq]?.terrain !== 'ocean' && map[nr]?.[nq]?.terrain !== 'deepocean'
     ) || [pos.q + 1, pos.r];
 
+    // Gaians get extra movement on scouts
+    const scoutMovement = faction.personality.xenophilia > 8 ? 3 : 2;
     units.push({
       id: genId(), name: 'Scout Rover', type: 'scout', factionId: faction.id,
-      hp: 10, maxHp: 10, attack: 1, defense: 1, movement: 2, movementLeft: 2,
+      hp: 10, maxHp: 10, attack: 1, defense: 1, movement: scoutMovement, movementLeft: scoutMovement,
       q: scoutPos[0], r: scoutPos[1], veterancy: 0
     });
+
+    // Prometheans (aggression>7) start with an extra Infantry unit
+    if (faction.personality.aggression > 7) {
+      const infantryNeighbors = hexNeighbors(pos.q, pos.r);
+      const infantryPos = infantryNeighbors.find(([nq, nr]) =>
+        nq >= 0 && nq < w && nr >= 0 && nr < h &&
+        map[nr]?.[nq]?.terrain !== 'ocean' && map[nr]?.[nq]?.terrain !== 'deepocean' &&
+        !(nq === scoutPos[0] && nr === scoutPos[1])
+      ) || [pos.q, pos.r];
+      units.push({
+        id: genId(), name: 'Infantry', type: 'infantry', factionId: faction.id,
+        hp: 15, maxHp: 15, attack: 2, defense: 2, movement: 1, movementLeft: 1,
+        q: infantryPos[0], r: infantryPos[1], veterancy: 0
+      });
+    }
+
+    // Lucid (research>8) start with extra research progress
+    if (faction.personality.research > 8) {
+      researchProgress[faction.id] = 10;
+    }
 
     // Explore area around start
     const exploreRadius = 3;
@@ -261,18 +283,80 @@ export function processTurn(state: GameState): GameState {
 
   // Random events
   if (Math.random() < 0.08) {
-    const events = [
-      { title: 'Solar Flare', text: 'A massive solar flare from Alpha Centauri A disrupts communications briefly.' },
-      { title: 'Xenofungal Bloom', text: 'A massive bloom of xenofungus has been detected spreading across the continent.' },
-      { title: 'Seismic Activity', text: 'Seismographs detect unusual tectonic activity beneath the xenofungal networks.' },
-      { title: 'Mindworm Migration', text: 'Large boils of mindworms have been observed migrating across the plains.' },
-      { title: 'Orbital Debris', text: 'Fragments of the Unity have been detected entering the atmosphere.' },
-      { title: 'Psi Anomaly', text: 'Sensitive individuals report strange dreams and visions from the deep fungus.' },
+    const playerBases = newState.bases.filter(b => b.factionId === newState.playerFactionId);
+    const events: { title: string; text: string; effect?: () => void }[] = [
+      { title: 'Solar Flare', text: 'A massive solar flare from Alpha Centauri A disrupts communications. Research slowed this turn.',
+        effect: () => { newState.researchProgress[newState.playerFactionId] = Math.max(0, (newState.researchProgress[newState.playerFactionId] || 0) - 5); }
+      },
+      { title: 'Xenofungal Bloom', text: 'A massive bloom of xenofungus spreads across the continent. Fungal tiles nearby grow richer with nutrients.' },
+      { title: 'Seismic Activity', text: 'Tectonic shifts beneath the fungal networks shake your settlements. Minor structural damage reported.',
+        effect: () => { if (playerBases.length > 0) { const b = playerBases[Math.floor(Math.random() * playerBases.length)]; b.minerals = Math.max(0, b.minerals - 5); } }
+      },
+      { title: 'Mindworm Migration', text: 'Large boils of mindworms migrate across the plains. Scouts report heightened psi activity in the region.' },
+      { title: 'Orbital Debris', text: 'Fragments of the Unity enter the atmosphere. Salvage teams recover useful materials!',
+        effect: () => { if (playerBases.length > 0) { const b = playerBases[Math.floor(Math.random() * playerBases.length)]; b.minerals += 15; } }
+      },
+      { title: 'Psi Anomaly', text: 'Strange dreams plague the colony. Sensitive individuals report visions of Planet\'s deep past. Research insights gained!',
+        effect: () => { newState.researchProgress[newState.playerFactionId] = (newState.researchProgress[newState.playerFactionId] || 0) + 8; }
+      },
+      { title: 'Geothermal Vent', text: 'A new geothermal vent erupts near your territory! Energy output surges.',
+        effect: () => { if (playerBases.length > 0) { const b = playerBases[Math.floor(Math.random() * playerBases.length)]; b.energy += 10; } }
+      },
+      { title: 'Nutrient Bonus', text: 'Unusual rainfall triggers explosive growth in local flora. Nutrient yields increase temporarily.',
+        effect: () => { if (playerBases.length > 0) { const b = playerBases[Math.floor(Math.random() * playerBases.length)]; b.nutrients += 10; } }
+      },
+      { title: 'Planetquake', text: 'A violent planetquake rocks the continent! Buildings are damaged but the ground reveals rich mineral deposits.',
+        effect: () => { if (playerBases.length > 0) { const b = playerBases[Math.floor(Math.random() * playerBases.length)]; b.minerals += 8; b.morale = Math.max(30, b.morale - 5); } }
+      },
+      { title: 'Alien Artifact', text: 'Scouts uncover a strange artifact of non-human origin buried in the xenofungus. Analysis yields a research breakthrough!',
+        effect: () => { newState.researchProgress[newState.playerFactionId] = (newState.researchProgress[newState.playerFactionId] || 0) + 15; }
+      },
+      { title: 'Fungal Tower Sighting', text: 'A massive fungal tower has been spotted on the horizon, pulsing with bioluminescent light. Planet is watching.' },
+      { title: 'Unity Supply Cache', text: 'Colonists discover a supply pod from the Unity that survived reentry. Energy reserves boosted!',
+        effect: () => { if (playerBases.length > 0) { const b = playerBases[Math.floor(Math.random() * playerBases.length)]; b.energy += 20; } }
+      },
+      { title: 'Morale Surge', text: 'A beautiful aurora dances across the alien sky. Citizens are inspired by the beauty of their new home.',
+        effect: () => { playerBases.forEach(b => { b.morale = Math.min(100, b.morale + 5); }); }
+      },
+      { title: 'Electromagnetic Storm', text: 'An electromagnetic storm sweeps across the region, disrupting electronics and draining energy reserves.',
+        effect: () => { if (playerBases.length > 0) { const b = playerBases[Math.floor(Math.random() * playerBases.length)]; b.energy = Math.max(0, b.energy - 8); } }
+      },
     ];
     const event = events[Math.floor(Math.random() * events.length)];
+    if (event.effect) { event.effect(); }
     newState.messages.push({
-      id: genId(), turn: newState.turn, type: 'event', ...event
+      id: genId(), turn: newState.turn, type: 'event', title: event.title, text: event.text
     });
+  }
+
+  // Mindworm spawning near high xenolife tiles
+  if (Math.random() < 0.05) {
+    // Find a fungus tile with high xenolife not near a base
+    const candidates: {q:number, r:number}[] = [];
+    for (let r = 0; r < newState.mapHeight; r++) {
+      for (let q = 0; q < newState.mapWidth; q++) {
+        const tile = newState.map[r][q];
+        if (tile.xenoLifeLevel >= 2 && !tile.base) {
+          const nearBase = newState.bases.some(b => hexDistance(b.q, b.r, q, r) < 3);
+          if (!nearBase && !newState.units.some(u => u.q === q && u.r === r)) {
+            candidates.push({q, r});
+          }
+        }
+      }
+    }
+    if (candidates.length > 0) {
+      const spot = candidates[Math.floor(Math.random() * candidates.length)];
+      newState.units.push({
+        id: genId(), name: 'Mind Worm', type: 'mindworm', factionId: 'native',
+        hp: 8, maxHp: 8, attack: 3, defense: 2, movement: 1, movementLeft: 1,
+        q: spot.q, r: spot.r, veterancy: 0
+      });
+      newState.messages.push({
+        id: genId(), turn: newState.turn, type: 'event',
+        title: 'Mindworm Sighting!',
+        text: 'A boil of native mindworms has emerged from the xenofungus. Planet stirs in its sleep...'
+      });
+    }
   }
 
   // Update victory progress
@@ -355,7 +439,33 @@ export function moveUnit(state: GameState, unitId: string, targetQ: number, targ
   // Check for enemy unit on target
   const enemyUnit = newState.units.find(u => u.q === targetQ && u.r === targetR && u.factionId !== unit.factionId);
   if (enemyUnit) {
-    const result = resolveCombat(unit, enemyUnit);
+    // Calculate terrain defense bonus for defender
+    let terrainDefenseBonus = 0;
+    const defenderTile = newState.map[targetR]?.[targetQ];
+    if (defenderTile) {
+      // Rocky and mesa terrain provide +25% defense
+      if (defenderTile.terrain === 'rocky' || defenderTile.terrain === 'mesa') {
+        terrainDefenseBonus += 0.25;
+      }
+      // Xenoforest provides +25% defense
+      if (defenderTile.terrain === 'xenoforest') {
+        terrainDefenseBonus += 0.25;
+      }
+      // Fungus provides +50% defense for native mindworms, +10% for others
+      if (defenderTile.terrain === 'fungus') {
+        terrainDefenseBonus += enemyUnit.factionId === 'native' ? 0.5 : 0.1;
+      }
+    }
+    // Defending in a base provides +50% defense
+    const defenderBase = newState.bases.find(b => b.q === targetQ && b.r === targetR);
+    if (defenderBase) {
+      terrainDefenseBonus += 0.5;
+      // Perimeter Defense facility adds another +25%
+      if (defenderBase.facilities.includes('Perimeter Defense')) {
+        terrainDefenseBonus += 0.25;
+      }
+    }
+    const result = resolveCombat(unit, enemyUnit, terrainDefenseBonus);
     unit.hp -= result.attackerDamage;
     enemyUnit.hp -= result.defenderDamage;
 
@@ -404,9 +514,9 @@ export function moveUnit(state: GameState, unitId: string, targetQ: number, targ
   return newState;
 }
 
-export function resolveCombat(attacker: Unit, defender: Unit): { attackerDamage: number; defenderDamage: number } {
+export function resolveCombat(attacker: Unit, defender: Unit, terrainDefenseBonus: number = 0): { attackerDamage: number; defenderDamage: number } {
   const attackPower = attacker.attack * (1 + attacker.veterancy * 0.25) * (attacker.hp / attacker.maxHp);
-  const defensePower = defender.defense * (1 + defender.veterancy * 0.25) * (defender.hp / defender.maxHp);
+  const defensePower = defender.defense * (1 + defender.veterancy * 0.25) * (defender.hp / defender.maxHp) * (1 + terrainDefenseBonus);
 
   const attackRoll = attackPower * (0.7 + Math.random() * 0.6);
   const defenseRoll = defensePower * (0.7 + Math.random() * 0.6);

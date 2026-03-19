@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useGame } from '../game/GameContext';
 import { Faction } from '../game/types';
-import { FACTIONS } from '../game/factions';
+import { FACTIONS, getRandomQuote } from '../game/factions';
 
 const STAR_COUNT = 150;
 
@@ -75,8 +75,16 @@ export default function FactionSelect() {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [visible, setVisible] = useState(false);
 
+  const [randomQuote, setRandomQuote] = useState<string>('');
   const factions = FACTIONS;
   const selectedFaction = factions.find((f) => f.id === selectedId);
+
+  // Update random quote when faction selection changes
+  useEffect(() => {
+    if (selectedFaction) {
+      setRandomQuote(getRandomQuote(selectedFaction));
+    }
+  }, [selectedId]);
 
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 100);
@@ -132,7 +140,7 @@ export default function FactionSelect() {
           transition: 'all 0.8s ease-out',
         }}
       >
-        <div className="text-[10px] uppercase tracking-[0.5em] text-cyan-500/50 mb-2">Select Your Faction</div>
+        <div className="text-xs sm:text-[10px] uppercase tracking-[0.5em] text-cyan-500/50 mb-2">Select Your Faction</div>
         <h1
           className="text-3xl font-bold tracking-wider"
           style={{
@@ -154,7 +162,7 @@ export default function FactionSelect() {
           transition: 'opacity 1s ease-out 0.3s',
         }}
       >
-        <div className="flex gap-4 p-4">
+        <div className="flex flex-wrap justify-center gap-4 p-4">
           {factions.map((faction) => {
             const isSelected = selectedId === faction.id;
             const isHovered = hoveredId === faction.id;
@@ -165,7 +173,7 @@ export default function FactionSelect() {
                 onClick={() => setSelectedId(faction.id)}
                 onMouseEnter={() => setHoveredId(faction.id)}
                 onMouseLeave={() => setHoveredId(null)}
-                className="flex-shrink-0 w-48 rounded-lg p-4 transition-all duration-300 cursor-pointer text-left"
+                className="flex-shrink-0 w-36 sm:w-48 rounded-lg p-4 transition-all duration-300 cursor-pointer text-left active:scale-[0.98]"
                 style={{
                   background: isSelected
                     ? `linear-gradient(180deg, ${faction.color}22 0%, rgba(0,0,0,0.8) 100%)`
@@ -187,19 +195,19 @@ export default function FactionSelect() {
                   <div className="text-sm font-bold tracking-wide" style={{ color: faction.color }}>
                     {faction.name}
                   </div>
-                  <div className="text-[10px] text-gray-500">{faction.leader}</div>
-                  <div className="text-[9px] text-gray-600 italic mt-0.5">{faction.ideology}</div>
+                  <div className="text-xs sm:text-[10px] text-gray-500">{faction.leader}</div>
+                  <div className="text-[11px] sm:text-[9px] text-gray-600 italic mt-0.5">{faction.ideology}</div>
                 </div>
 
                 {/* Bonuses/Penalties */}
                 <div className="space-y-1 mt-3">
                   {faction.bonuses.slice(0, 2).map((b, i) => (
-                    <div key={i} className="text-[9px] text-green-400/80 flex items-start gap-1">
+                    <div key={i} className="text-[11px] sm:text-[9px] text-green-400/80 flex items-start gap-1">
                       <span className="text-green-500">+</span> {b}
                     </div>
                   ))}
                   {faction.penalties.slice(0, 2).map((p, i) => (
-                    <div key={i} className="text-[9px] text-red-400/60 flex items-start gap-1">
+                    <div key={i} className="text-[11px] sm:text-[9px] text-red-400/60 flex items-start gap-1">
                       <span className="text-red-500">-</span> {p}
                     </div>
                   ))}
@@ -208,7 +216,7 @@ export default function FactionSelect() {
                 {/* Selection indicator */}
                 {isSelected && (
                   <div
-                    className="mt-3 text-center text-[9px] uppercase tracking-widest py-1 rounded"
+                    className="mt-3 text-center text-[11px] sm:text-[9px] uppercase tracking-widest py-1 rounded"
                     style={{
                       background: `${faction.color}22`,
                       color: faction.color,
@@ -238,6 +246,11 @@ export default function FactionSelect() {
               <div className="text-xs text-gray-400 leading-relaxed line-clamp-2">
                 {selectedFaction.backstory}
               </div>
+              {randomQuote && (
+                <div className="text-[11px] italic mt-1.5 leading-relaxed line-clamp-2" style={{ color: `${selectedFaction.color}99` }}>
+                  {randomQuote}
+                </div>
+              )}
             </div>
             <button
               onClick={handleBeginJourney}

@@ -110,7 +110,8 @@ export default function VictoryScreen() {
       <div className="absolute" style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
         {Array.from({ length: 24 }, (_, i) => {
           const angle = (i * 15 + particleAngle) * (Math.PI / 180);
-          const radius = 200 + Math.sin(i * 0.5 + particleAngle * 0.02) * 30;
+          const baseRadius = Math.min(200, window.innerWidth * 0.35);
+          const radius = baseRadius + Math.sin(i * 0.5 + particleAngle * 0.02) * 30;
           return (
             <div
               key={i}
@@ -151,9 +152,9 @@ export default function VictoryScreen() {
             transform: phase >= 1 ? 'translateY(0)' : 'translateY(20px)',
           }}
         >
-          <div className="text-[10px] uppercase tracking-[0.5em] text-gray-500 mb-2">Victory Achieved</div>
+          <div className="text-xs sm:text-[10px] uppercase tracking-[0.5em] text-gray-500 mb-2">Victory Achieved</div>
           <h1
-            className="text-4xl font-bold tracking-wider mb-4"
+            className="text-2xl sm:text-4xl font-bold tracking-wider mb-4"
             style={{
               color: victory.color,
               textShadow: `0 0 20px ${victory.color}44`,
@@ -197,7 +198,7 @@ export default function VictoryScreen() {
           }}
         >
           <div
-            className="grid grid-cols-3 gap-4 p-4 rounded-lg"
+            className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 rounded-lg"
             style={{
               background: 'rgba(255,255,255,0.02)',
               border: '1px solid rgba(255,255,255,0.05)',
@@ -218,7 +219,7 @@ export default function VictoryScreen() {
         >
           <button
             onClick={() => dispatch({ type: 'SET_PHASE', payload: 'title' })}
-            className="px-10 py-3 text-sm uppercase tracking-[0.3em] font-bold transition-all duration-300 cursor-pointer"
+            className="px-10 py-3 text-sm uppercase tracking-[0.3em] font-bold transition-all duration-300 cursor-pointer active:scale-95"
             style={{
               background: `${victory.color}22`,
               border: `1px solid ${victory.color}88`,

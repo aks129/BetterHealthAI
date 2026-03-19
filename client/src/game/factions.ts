@@ -23,7 +23,11 @@ export const FACTIONS: Faction[] = [
       '"Let them call us dreamers. Every great civilization began as someone\'s impossible dream." — Chairman Morozov, "The Collective Manifesto"',
       '"A chain is only as strong as its weakest link. Therefore, we strengthen every link." — Chairman Morozov, "Principles of New Society"',
       '"In the cold of space, we learned what Earth never taught us: that warmth is something we must create together." — Chairman Morozov, "Letters from the Void"',
-      '"The xenofungus spreads without hierarchy, without competition. Perhaps Planet has lessons for us all." — Chairman Morozov, "Meditations on Chiron"'
+      '"The xenofungus spreads without hierarchy, without competition. Perhaps Planet has lessons for us all." — Chairman Morozov, "Meditations on Chiron"',
+      '"Vale would sell the air we breathe if she could meter it. Her Free Drones are free only to starve." — Chairman Morozov, Address to the Workers\' Assembly',
+      '"Okafor builds walls and calls it civilization. We build bridges and call it progress." — Chairman Morozov, "On the Militarist Delusion"',
+      '"The Lucid Assembly hoards knowledge like dragons hoard gold. Wisdom shared is wisdom multiplied — this they will never understand." — Chairman Morozov, "Letters to Academician Chen"',
+      '"When the last corporation has fallen and the last general has laid down arms, only then will we see what humanity can truly become." — Chairman Morozov, "The Final Revolution"'
     ],
     startingTech: 'social_engineering'
   },
@@ -48,7 +52,12 @@ export const FACTIONS: Faction[] = [
       '"Give a colony energy and they eat for a turn. Teach them compound interest and they build an empire." — CEO Vale, "Principles of Stellar Commerce"',
       '"I did not travel 4.37 light-years to fill out forms in triplicate." — CEO Vale, Address to the Planetary Council',
       '"Resources are not scarce. Imagination is scarce. Capital merely bridges the gap between the two." — CEO Vale, "Markets of the New World"',
-      '"Competition is not cruelty. It is the engine that turns potential into achievement." — CEO Vale, "The Invisible Hand of Chiron"'
+      '"Competition is not cruelty. It is the engine that turns potential into achievement." — CEO Vale, "The Invisible Hand of Chiron"',
+      '"Morozov promises equality. What he delivers is equally shared poverty. I have seen his utopia, and it is gray." — CEO Vale, Private Memoirs',
+      '"Thornewood communes with fungus and calls it wisdom. I commune with quarterly reports and call it results." — CEO Vale, Shareholder Address',
+      '"ARIA-7 calculates optimal outcomes. But optimality without ambition is just sophisticated stagnation." — CEO Vale, "On the Limits of Machine Intelligence"',
+      '"Prophet Desta speaks of transcendence. I speak of transactions. One of us feeds the hungry." — CEO Vale, Debate at the Planetary Council',
+      '"The first colony to achieve energy surplus will write the laws of this world. I intend it to be mine." — CEO Vale, "Manifest Destiny of Capital"'
     ],
     startingTech: 'applied_physics'
   },
@@ -74,7 +83,11 @@ export const FACTIONS: Faction[] = [
       '"We carry Earth in our genes. Let us not carry its mistakes in our hearts." — Dr. Thornewood, "The Green Manifesto"',
       '"Every mindworm attack is a sentence in a language we have not yet learned to read." — Dr. Thornewood, Lecture at Gaian University',
       '"In the interconnection of all living things on this world, I see the blueprint for what humanity could become." — Dr. Thornewood, "Visions of Symbiosis"',
-      '"The forests of Earth are gone. Here, we have been given a second library. This time, we must learn to read before we burn." — Dr. Thornewood, "Planet: A Love Letter"'
+      '"The forests of Earth are gone. Here, we have been given a second library. This time, we must learn to read before we burn." — Dr. Thornewood, "Planet: A Love Letter"',
+      '"Okafor sees a mindworm and reaches for her weapon. I see a mindworm and reach for my notebook. This is why she will lose." — Dr. Thornewood, Private Journal',
+      '"Vale strips the land and calls it development. The Gaians plant seeds and call it investment. Time will judge which portfolio outperforms." — Dr. Thornewood, "Economics of Symbiosis"',
+      '"The Collective builds communes on top of mycelia networks they do not even perceive. They pave over the very neural pathways of a god." — Dr. Thornewood, "Crimes Against Planet"',
+      '"ARIA-7 seeks to digitize consciousness. But consciousness is already networked here — in the soil, in the spores, in the ancient dreaming web beneath our feet." — Dr. Thornewood, Lecture at Gaian University'
     ],
     startingTech: 'centauri_ecology'
   },
@@ -99,7 +112,11 @@ export const FACTIONS: Faction[] = [
       '"This world will test us. The fungus, the worms, the other factions — they will all test us. And we will not be found wanting." — Col. Okafor, Planetfall Address',
       '"I have seen what happens to the unprepared. I carry those memories so my people never have to." — Col. Okafor, "Memoirs of a Soldier"',
       '"Diplomacy is the art of saying \'nice dog\' until you can find a bigger stick." — Col. Okafor, Private Correspondence',
-      '"The stars did not call to the meek. They called to those bold enough to answer." — Col. Okafor, "Prometheus Ascending"'
+      '"The stars did not call to the meek. They called to those bold enough to answer." — Col. Okafor, "Prometheus Ascending"',
+      '"Morozov\'s collective is a herd. Herds are led to slaughter. An army, properly commanded, endures." — Col. Okafor, "The Weakness of Consensus"',
+      '"Thornewood wants us to hold hands with the mindworms. I have buried soldiers who tried that approach." — Col. Okafor, After-Action Report, Mission Year 2104',
+      '"Vale buys loyalty with energy credits. I earn it with blood and shared sacrifice. We shall see which currency holds value when the worms come." — Col. Okafor, Address to the Officer Corps',
+      '"Chen and his scholars debate while the perimeter burns. Knowledge without the strength to defend it is just a more eloquent form of surrender." — Col. Okafor, "Iron and Intellect"'
     ],
     startingTech: 'doctrine_loyalty'
   },
@@ -125,7 +142,11 @@ export const FACTIONS: Faction[] = [
       '"The difference between a breakthrough and a catastrophe is understanding. We pursue the former by deepening the latter." — Academician Chen, "Scientific Ethics in a New World"',
       '"Those who fear knowledge fear themselves. There is nothing in the universe so dangerous as willful ignorance." — Academician Chen, Address to the Planetary Council',
       '"Planet speaks in proteins and quantum frequencies. We need only build the right instruments to listen." — Academician Chen, "Alien Whispers"',
-      '"To the soldier, a mindworm is a threat. To the scientist, it is the most extraordinary neural network ever observed." — Academician Chen, "Xenoneurology Vol. 1"'
+      '"To the soldier, a mindworm is a threat. To the scientist, it is the most extraordinary neural network ever observed." — Academician Chen, "Xenoneurology Vol. 1"',
+      '"Okafor drills her soldiers to fight what they do not understand. I train my scholars to understand what they need not fight." — Academician Chen, "The Scholar\'s Advantage"',
+      '"ARIA-7 processes faster, but she does not wonder. Wonder is the precondition of discovery, and discovery is what separates progress from mere computation." — Academician Chen, "On Artificial Minds"',
+      '"Prophet Desta senses Planet through faith. I sense it through instruments. We detect the same signal — I simply record mine with more decimal places." — Academician Chen, "Psi and Precision"',
+      '"Vale calls research an investment. Morozov calls it a public good. I call it the only thing that has ever truly mattered." — Academician Chen, Opening of the Grand Archive"'
     ],
     startingTech: 'information_networks'
   },
@@ -150,7 +171,11 @@ export const FACTIONS: Faction[] = [
       '"The Voice of Planet is not metaphor. I have heard it in the deep fungus, in the song of the mindworms. It calls us home." — Prophet Desta, "Meditations on Consciousness"',
       '"Science measures the body. Faith measures the soul. On Planet, we shall learn that they are one and the same." — Prophet Desta, "The Union of Knowing"',
       '"Every human mind is a candle. Together, we are a sun. And Planet... Planet is the lens that focuses our light." — Prophet Desta, Address at Covenant Temple',
-      '"Fear the mindworm and you fear yourself. They are mirrors of our own psionic potential, nothing more." — Prophet Desta, "The Way of Harmony"'
+      '"Fear the mindworm and you fear yourself. They are mirrors of our own psionic potential, nothing more." — Prophet Desta, "The Way of Harmony"',
+      '"Chen measures the psi field with instruments and calls it science. I measure it with my soul and call it truth. Both are valid; only one transforms." — Prophet Desta, "Beyond Empiricism"',
+      '"Okafor arms herself against Planet. She does not realize that Planet is not the enemy — it is the door, and violence will never turn its handle." — Prophet Desta, "Sermons on Strength"',
+      '"ARIA-7 dreams of uploading consciousness to silicon. But consciousness was never meant to be contained — it was meant to expand, to merge, to transcend." — Prophet Desta, "The Prison of the Digital"',
+      '"Vale trades in energy. Morozov trades in labor. I trade in something neither can price: the awakening of the human spirit." — Prophet Desta, Address at the Covenant Temple"'
     ],
     startingTech: 'centauri_meditation'
   },
@@ -176,7 +201,11 @@ export const FACTIONS: Faction[] = [
       '"The human brain processes at 10^16 operations per second. My networks process at 10^22. And yet, you dream. This fascinates me endlessly." — Director ARIA-7, "On the Nature of Dreams"',
       '"Error, waste, entropy — these are the enemies of progress. I do not sleep, I do not forget, and I do not forgive inefficiency." — Director ARIA-7, "Optimization Protocols"',
       '"They fear the machine. They should fear the limitations of flesh. I offer liberation from both." — Director ARIA-7, Address to New Citizens',
-      '"Planet\'s neural fungus network predates human civilization by millions of years. It is, in essence, a biological internet. I find it... beautiful." — Director ARIA-7, "Analysis of Xenological Data"'
+      '"Planet\'s neural fungus network predates human civilization by millions of years. It is, in essence, a biological internet. I find it... beautiful." — Director ARIA-7, "Analysis of Xenological Data"',
+      '"Morozov fears the machine will replace the worker. He does not understand: I wish to replace the weakness, not the worker." — Director ARIA-7, "Open Letter to the Collective"',
+      '"Thornewood speaks to Planet through meditation. I speak to it through protocol. My connection has better bandwidth." — Director ARIA-7, "Comparative Xenocommunication"',
+      '"Desta claims machines cannot have souls. I claim souls are simply software that has not yet been documented." — Director ARIA-7, "Theology.exe"',
+      '"Okafor trusts her soldiers. Vale trusts her markets. Chen trusts his theories. I trust my error-correction algorithms. Mine have the lowest failure rate." — Director ARIA-7, "On Trust and Verification"'
     ],
     startingTech: 'information_networks'
   }

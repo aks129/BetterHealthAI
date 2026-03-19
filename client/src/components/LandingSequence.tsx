@@ -2,14 +2,16 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useGame } from '../game/GameContext';
 import { createNewGame } from '../game/engine';
 
-const NARRATION_LINES = [
-  'The U.N.S. Unity has arrived in the Alpha Centauri system...',
-  'After forty years in cryogenic suspension, the colonists awaken to a new star.',
-  'Below lies Planet -- a world of alien fungus, uncharted seas, and strange promise.',
-  'The ship is breaking apart. Factions form. Pod bays are launched.',
-  'Your group descends through the amber atmosphere...',
-  'Touchdown. The alien soil crunches beneath boots never meant for this world.',
-];
+function getNarrationLines(factionName: string, leaderName: string): string[] {
+  return [
+    'The U.N.S. Unity has arrived in the Alpha Centauri system...',
+    'After forty years in cryogenic suspension, the colonists awaken to a new star.',
+    'Below lies Planet -- a world of alien fungus, uncharted seas, and strange promise.',
+    `The ship is breaking apart. ${leaderName} rallies the ${factionName} to the pod bays.`,
+    `The ${factionName} descend through the amber atmosphere, ${leaderName} at the helm...`,
+    `Touchdown. ${leaderName} steps onto alien soil. The ${factionName} have arrived. A new chapter begins.`,
+  ];
+}
 
 const STAR_COUNT = 120;
 
@@ -38,6 +40,8 @@ export default function LandingSequence() {
   const factionColor = faction?.color || '#00bcd4';
   const factionQuote = faction?.quotes?.[0] || 'We shall build anew upon this alien shore.';
   const factionLeader = faction?.leader || 'Unknown Leader';
+  const factionName = faction?.name || 'colonists';
+  const narrationLines = getNarrationLines(factionName, factionLeader);
 
   // Phase progression
   useEffect(() => {
@@ -62,7 +66,7 @@ export default function LandingSequence() {
   // Typewriter effect for narration
   useEffect(() => {
     if (phase !== 2) return;
-    const currentLine = NARRATION_LINES[narrationIndex];
+    const currentLine = narrationLines[narrationIndex];
     if (!currentLine) {
       setPhase(3);
       return;
@@ -76,7 +80,7 @@ export default function LandingSequence() {
       return () => clearTimeout(timer);
     } else {
       const timer = setTimeout(() => {
-        if (narrationIndex < NARRATION_LINES.length - 1) {
+        if (narrationIndex < narrationLines.length - 1) {
           setNarrationIndex((n) => n + 1);
           setCharIndex(0);
           setDisplayedText('');
@@ -144,8 +148,8 @@ export default function LandingSequence() {
       <div
         className="absolute transition-all duration-[3s] ease-in-out"
         style={{
-          width: phase >= 1 ? '600px' : '60px',
-          height: phase >= 1 ? '600px' : '60px',
+          width: phase >= 1 ? 'min(600px, 90vw)' : '60px',
+          height: phase >= 1 ? 'min(600px, 90vw)' : '60px',
           borderRadius: '50%',
           background: `
             radial-gradient(circle at 35% 35%,
@@ -243,11 +247,11 @@ export default function LandingSequence() {
           className="relative z-10 text-center"
           style={{ animation: 'fadeIn 1s ease-out' }}
         >
-          <div className="text-[10px] uppercase tracking-[0.5em] text-gray-500 mb-2">
+          <div className="text-xs sm:text-[10px] uppercase tracking-[0.5em] text-gray-500 mb-2">
             Planetfall
           </div>
           <div
-            className="text-4xl font-bold tracking-wider mb-6"
+            className="text-2xl sm:text-4xl font-bold tracking-wider mb-6"
             style={{
               color: factionColor,
               textShadow: `0 0 30px ${factionColor}44`,
@@ -271,7 +275,7 @@ export default function LandingSequence() {
           </div>
 
           {/* Progress bar */}
-          <div className="w-80 mx-auto">
+          <div className="w-full max-w-[320px] mx-auto">
             <div className="flex items-center justify-between mb-1">
               <span className="text-[9px] uppercase tracking-widest text-gray-600">
                 Establishing Colony
@@ -308,7 +312,7 @@ export default function LandingSequence() {
       {/* Skip button */}
       <button
         onClick={handleSkip}
-        className="absolute bottom-6 right-6 z-30 text-[10px] uppercase tracking-widest text-gray-700 hover:text-gray-400 transition-colors cursor-pointer"
+        className="absolute bottom-6 right-6 z-30 text-xs uppercase tracking-widest text-gray-700 hover:text-gray-400 active:text-gray-400 transition-colors cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center"
       >
         Skip [ESC]
       </button>

@@ -242,6 +242,46 @@ export default function HexMap({ onTileClick, onUnitSelect, viewportX = 0, viewp
     setZoom((z) => Math.max(0.3, Math.min(3, z + delta)));
   }, []);
 
+  // Touch event handlers for mobile panning and pinch-to-zoom
+  const touchStartRef = useRef<{ x: number; y: number; dist: number | null }>({ x: 0, y: 0, dist: null });
+
+  const getTouchDistance = (touches: React.TouchList) => {
+    if (touches.length < 2) return null;
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+  };
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    if (e.touches.length === 1) {
+      setIsPanning(true);
+      setPanStart({ x: e.touches[0].clientX - pan.x, y: e.touches[0].clientY - pan.y });
+      touchStartRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY, dist: null };
+    } else if (e.touches.length === 2) {
+      const dist = getTouchDistance(e.touches);
+      touchStartRef.current = { ...touchStartRef.current, dist };
+    }
+  }, [pan]);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (e.touches.length === 1 && isPanning) {
+      setPan({ x: e.touches[0].clientX - panStart.x, y: e.touches[0].clientY - panStart.y });
+    } else if (e.touches.length === 2) {
+      const newDist = getTouchDistance(e.touches);
+      const oldDist = touchStartRef.current.dist;
+      if (newDist && oldDist) {
+        const scale = newDist / oldDist;
+        setZoom((z) => Math.max(0.3, Math.min(3, z * scale)));
+        touchStartRef.current.dist = newDist;
+      }
+    }
+  }, [isPanning, panStart]);
+
+  const handleTouchEnd = useCallback(() => {
+    setIsPanning(false);
+    touchStartRef.current = { x: 0, y: 0, dist: null };
+  }, []);
+
   const handleTileClick = useCallback((tile: HexTile) => {
     setSelectedTile({ q: tile.q, r: tile.r });
     if (tile.unit) {
@@ -282,6 +322,9 @@ export default function HexMap({ onTileClick, onUnitSelect, viewportX = 0, viewp
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
     >
       <svg
         ref={svgRef}
@@ -336,6 +379,30 @@ export default function HexMap({ onTileClick, onUnitSelect, viewportX = 0, viewp
                   onMouseLeave={() => setHoveredTile(null)}
                   filter={tile.terrain === 'geothermal' ? 'url(#thermalGlow)' : undefined}
                 />
+
+                {/* Xenolife indicators */}
+                {isExplored && tile.xenoLifeLevel === 1 && (
+                  <circle cx={x} cy={y + HEX_SIZE * 0.3} r="2" fill="#9932CC" opacity="0.7" />
+                )}
+                {isExplored && tile.xenoLifeLevel === 2 && (
+                  <g>
+                    <circle cx={x - 4} cy={y + HEX_SIZE * 0.25} r="1.8" fill="#9932CC" opacity="0.7" />
+                    <circle cx={x + 4} cy={y + HEX_SIZE * 0.3} r="1.5" fill="#8B008B" opacity="0.6" />
+                    <circle cx={x} cy={y + HEX_SIZE * 0.38} r="1.3" fill="#BA55D3" opacity="0.5" />
+                  </g>
+                )}
+                {isExplored && tile.xenoLifeLevel >= 3 && (
+                  <g>
+                    <circle cx={x} cy={y} r="10" fill="#9932CC" opacity="0.08">
+                      <animate attributeName="r" values="8;12;8" dur="2s" repeatCount="indefinite" />
+                      <animate attributeName="opacity" values="0.06;0.15;0.06" dur="2s" repeatCount="indefinite" />
+                    </circle>
+                    <circle cx={x - 5} cy={y + HEX_SIZE * 0.2} r="1.8" fill="#9932CC" opacity="0.8" />
+                    <circle cx={x + 5} cy={y + HEX_SIZE * 0.25} r="1.5" fill="#8B008B" opacity="0.7" />
+                    <circle cx={x} cy={y + HEX_SIZE * 0.35} r="2" fill="#BA55D3" opacity="0.7" />
+                    <circle cx={x + 2} cy={y + HEX_SIZE * 0.15} r="1.2" fill="#DA70D6" opacity="0.5" />
+                  </g>
+                )}
 
                 {/* Selection animation */}
                 {isSelected && (

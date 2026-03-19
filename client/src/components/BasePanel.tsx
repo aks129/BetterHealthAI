@@ -53,7 +53,7 @@ export default function BasePanel() {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.7)' }}>
       <div
-        className="w-[700px] max-h-[80vh] overflow-hidden rounded-lg"
+        className="w-full max-w-[700px] max-h-[80vh] overflow-hidden rounded-lg mx-4"
         style={{
           background: 'linear-gradient(135deg, rgba(8,14,28,0.99) 0%, rgba(4,8,16,0.99) 100%)',
           border: `1px solid ${factionColor}33`,
@@ -81,7 +81,7 @@ export default function BasePanel() {
           </div>
           <button
             onClick={() => dispatch({ type: 'SELECT_BASE', payload: null })}
-            className="w-8 h-8 flex items-center justify-center text-gray-600 hover:text-cyan-400 transition-colors cursor-pointer border border-gray-700 hover:border-cyan-700 rounded"
+            className="w-10 h-10 flex items-center justify-center text-gray-600 hover:text-cyan-400 active:text-cyan-400 transition-colors cursor-pointer border border-gray-700 hover:border-cyan-700 rounded"
           >
             ✕
           </button>
@@ -164,7 +164,7 @@ export default function BasePanel() {
                 style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}
               >
                 <div className="text-[9px] uppercase tracking-widest text-gray-500 mb-3">Resource Production</div>
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                   <ResourceBar label="Nutrients" value={selectedBase.nutrients} max={20} color="#4ade80" icon="N" />
                   <ResourceBar label="Minerals" value={selectedBase.minerals} max={20} color="#f59e0b" icon="M" />
                   <ResourceBar label="Energy" value={selectedBase.energy} max={20} color="#facc15" icon="E" />
@@ -228,7 +228,7 @@ export default function BasePanel() {
               >
                 <div className="text-[9px] uppercase tracking-widest text-gray-500 mb-3">Facilities</div>
                 {selectedBase.facilities.length > 0 ? (
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {selectedBase.facilities.map((facility) => (
                       <div
                         key={facility}
@@ -356,7 +356,7 @@ function BuildOption({
       disabled={disabled}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="w-full flex items-center justify-between p-2 rounded transition-all duration-200 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed text-left"
+      className="w-full flex items-center justify-between p-2 rounded transition-all duration-200 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed text-left active:scale-[0.98] min-h-[44px]"
       style={{
         background: hovered && !disabled ? `${factionColor}11` : 'rgba(255,255,255,0.02)',
         border: `1px solid ${hovered && !disabled ? `${factionColor}33` : 'rgba(255,255,255,0.03)'}`,

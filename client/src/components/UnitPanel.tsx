@@ -183,7 +183,7 @@ export default function UnitPanel() {
                   }}
                   onMouseEnter={() => setHoveredAction(action.key)}
                   onMouseLeave={() => setHoveredAction(null)}
-                  className="px-3 py-1.5 text-[10px] uppercase tracking-wider font-medium transition-all duration-200 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="px-3 py-1.5 min-h-[44px] text-xs uppercase tracking-wider font-medium transition-all duration-200 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed active:scale-95"
                   style={{
                     background: hoveredAction === action.key && action.enabled
                       ? `${action.key === 'disband' ? '#ff3333' : factionColor}22`
@@ -206,7 +206,7 @@ export default function UnitPanel() {
           {/* Close button */}
           <button
             onClick={() => dispatch({ type: 'SELECT_UNIT', payload: null })}
-            className="flex-shrink-0 w-7 h-7 flex items-center justify-center text-gray-600 hover:text-cyan-400 transition-colors cursor-pointer text-sm"
+            className="flex-shrink-0 w-10 h-10 flex items-center justify-center text-gray-600 hover:text-cyan-400 active:text-cyan-400 transition-colors cursor-pointer text-sm"
           >
             ✕
           </button>

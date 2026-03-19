@@ -43,7 +43,7 @@ export default function TopBar() {
         {/* Faction badge */}
         <div className="flex items-center gap-3">
           <div
-            className="w-8 h-8 rounded-sm flex items-center justify-center text-xs font-bold"
+            className="w-10 h-10 rounded-sm flex items-center justify-center text-xs font-bold"
             style={{
               background: `${factionColor}22`,
               border: `1px solid ${factionColor}66`,
@@ -91,14 +91,14 @@ export default function TopBar() {
       </div>
 
       {/* Right: Action buttons */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 flex-wrap">
         {buttons.map((btn) => (
           <button
             key={btn.key}
             onClick={btn.action}
             onMouseEnter={() => setHoveredButton(btn.key)}
             onMouseLeave={() => setHoveredButton(null)}
-            className="px-4 py-1.5 text-xs uppercase tracking-wider font-medium transition-all duration-200 cursor-pointer"
+            className="px-2 sm:px-4 py-2 text-[10px] sm:text-xs uppercase tracking-wider font-medium transition-all duration-200 cursor-pointer active:bg-opacity-30"
             style={{
               background: hoveredButton === btn.key
                 ? `${btn.key === 'endturn' ? factionColor : '#00bcd4'}22`
@@ -143,7 +143,7 @@ function ResourceDisplay({ label, value, color, icon }: { label: string; value: 
   return (
     <div className="flex items-center gap-2">
       <div
-        className="w-6 h-6 rounded-sm flex items-center justify-center text-[10px] font-bold"
+        className="w-6 h-6 rounded-sm flex items-center justify-center text-xs sm:text-[10px] font-bold"
         style={{
           background: `${color}15`,
           border: `1px solid ${color}40`,
@@ -153,7 +153,7 @@ function ResourceDisplay({ label, value, color, icon }: { label: string; value: 
         {icon}
       </div>
       <div>
-        <div className="text-[9px] uppercase tracking-widest text-gray-500">{label}</div>
+        <div className="text-[11px] sm:text-[9px] uppercase tracking-widest text-gray-500 hidden sm:block">{label}</div>
         <div className="text-sm font-mono font-bold" style={{ color }}>
           {value}
         </div>

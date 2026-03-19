@@ -126,10 +126,10 @@ export default function DiplomacyPanel() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex" style={{ background: 'rgba(2,4,12,0.97)' }}>
+    <div className="fixed inset-0 z-50 flex flex-col sm:flex-row" style={{ background: 'rgba(2,4,12,0.97)' }}>
       {/* Left sidebar - Faction list */}
       <div
-        className="w-80 flex-shrink-0 flex flex-col overflow-hidden"
+        className="w-full sm:w-80 flex-shrink-0 flex flex-col overflow-hidden"
         style={{
           borderRight: '1px solid rgba(0,188,212,0.1)',
           background: 'linear-gradient(180deg, rgba(5,10,25,0.95) 0%, rgba(3,6,15,0.98) 100%)',
@@ -187,7 +187,7 @@ export default function DiplomacyPanel() {
         <div className="flex-shrink-0 px-6 py-3 flex justify-end border-b border-gray-800/30">
           <button
             onClick={() => dispatch({ type: 'SET_PHASE', payload: 'playing' })}
-            className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-cyan-400 transition-colors cursor-pointer border border-gray-700 hover:border-cyan-700 rounded"
+            className="w-10 h-10 flex items-center justify-center text-gray-500 hover:text-cyan-400 active:text-cyan-400 transition-colors cursor-pointer border border-gray-700 hover:border-cyan-700 rounded"
           >
             ✕
           </button>
@@ -271,7 +271,7 @@ export default function DiplomacyPanel() {
                     <button
                       key={action.key}
                       onClick={() => handleAction(action.key, selectedFaction)}
-                      className="p-3 rounded text-left transition-all duration-200 cursor-pointer group"
+                      className="p-3 rounded text-left transition-all duration-200 cursor-pointer group active:scale-[0.98] min-h-[44px]"
                       style={{
                         background: activeDialogue === action.key ? `${action.color}11` : 'rgba(0,0,0,0.2)',
                         border: `1px solid ${activeDialogue === action.key ? `${action.color}44` : 'rgba(255,255,255,0.05)'}`,

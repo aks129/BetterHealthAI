@@ -73,7 +73,7 @@ export const TECHNOLOGIES: Record<string, Technology> = {
   xenobiology: {
     id: 'xenobiology', name: 'Xenobiology', tier: 2, category: 'explore', cost: 50,
     description: 'Deep study of Planet\'s native organisms and their unique biochemistry.',
-    flavor: '"The mindworms communicate through quantum-entangled neurotransmitters. This is not biology — this is poetry."', quoteAuthor: 'Dr. Sylvia Thornewood',
+    flavor: '"The mindworms communicate through quantum-entangled neurotransmitters spanning kilometers of mycelia. Each worm is a synapse in a brain the size of a continent. This is not biology — this is poetry written in proteins, and we have only just begun to learn the alphabet."', quoteAuthor: 'Dr. Sylvia Thornewood',
     prerequisites: ['centauri_ecology', 'centauri_meditation'], unlocks: ['Biology Lab', 'Mindworm Capture']
   },
   industrial_base: {
@@ -85,13 +85,13 @@ export const TECHNOLOGIES: Record<string, Technology> = {
   ethical_calculus: {
     id: 'ethical_calculus', name: 'Ethical Calculus', tier: 2, category: 'build', cost: 45,
     description: 'Mathematical frameworks for resolving moral dilemmas in governance.',
-    flavor: '"Ethics without rigor is sentiment. Sentiment without ethics is chaos."', quoteAuthor: 'Chairman Vasily Morozov',
+    flavor: '"Ethics without rigor is sentiment. Sentiment without ethics is chaos. We must build a calculus of the common good — a mathematics of justice that even the coldest heart cannot refute, and the warmest cannot corrupt."', quoteAuthor: 'Chairman Vasily Morozov',
     prerequisites: ['social_engineering', 'information_networks'], unlocks: ['Children\'s Creche', 'Democratic Politics']
   },
   doctrine_initiative: {
     id: 'doctrine_initiative', name: 'Doctrine: Initiative', tier: 2, category: 'conquer', cost: 50,
     description: 'Military doctrine emphasizing speed, surprise, and decisive action.',
-    flavor: '"Strike first. Strike hard. Do not strike twice."', quoteAuthor: 'Col. Zara Okafor',
+    flavor: '"Strike first. Strike hard. Do not strike twice. The enemy who survives your opening salvo is the enemy who has learned your doctrine. Speed and violence of action — these are the currencies of survival on a hostile world."', quoteAuthor: 'Col. Zara Okafor',
     prerequisites: ['doctrine_loyalty', 'applied_physics'], unlocks: ['Speeder', 'Naval Yard', '+1 movement for rovers']
   },
   planetary_networks: {
@@ -103,7 +103,7 @@ export const TECHNOLOGIES: Record<string, Technology> = {
   psi_theory: {
     id: 'psi_theory', name: 'Psi Theory', tier: 2, category: 'explore', cost: 55,
     description: 'Theoretical framework for understanding psionic phenomena on Planet.',
-    flavor: '"The psi field is not supernatural. It is merely physics we do not yet comprehend."', quoteAuthor: 'Prophet Amare Desta',
+    flavor: '"The psi field is not supernatural. It is merely physics we do not yet comprehend. I have felt it in the deep fungus — a tremor of awareness, ancient and vast, pressing against the walls of my skull like an ocean against a seawall. We must learn to swim in that ocean, or drown."', quoteAuthor: 'Prophet Amare Desta',
     prerequisites: ['centauri_meditation', 'biogenetics'], unlocks: ['Psi Defense', 'Dream Twister']
   },
 
@@ -135,13 +135,13 @@ export const TECHNOLOGIES: Record<string, Technology> = {
   advanced_military: {
     id: 'advanced_military', name: 'Advanced Military Algorithms', tier: 3, category: 'conquer', cost: 90,
     description: 'AI-driven military strategy and autonomous combat systems.',
-    flavor: '"War is an equation. I have solved it."', quoteAuthor: 'Director ARIA-7',
+    flavor: '"War, at its foundation, is an optimization problem — minimize your losses, maximize theirs, iterate until convergence. I have run ten billion simulations. I have solved it."', quoteAuthor: 'Director ARIA-7',
     prerequisites: ['doctrine_initiative', 'quantum_networking'], unlocks: ['Needlejet', 'Aerospace Complex', 'Drop Pods']
   },
   planetary_economics: {
     id: 'planetary_economics', name: 'Planetary Economics', tier: 3, category: 'build', cost: 85,
     description: 'Economic theory adapted for interstellar colony management.',
-    flavor: '"A planet is not so different from a portfolio. Diversify, reinvest, and never panic."', quoteAuthor: 'CEO Morgan Vale',
+    flavor: '"A planet is not so different from a portfolio. Diversify, reinvest, and never panic. The colonist who hoards energy credits under the mattress will be outcompeted by the one who invests in futures — mineral futures, nutrient futures, the futures of entire civilizations."', quoteAuthor: 'CEO Morgan Vale',
     prerequisites: ['ethical_calculus', 'industrial_base'], unlocks: ['Energy Grid', 'Merchant Exchange (Wonder)']
   },
   psi_warfare: {

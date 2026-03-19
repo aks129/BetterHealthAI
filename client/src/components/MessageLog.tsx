@@ -58,7 +58,7 @@ export default function MessageLog() {
 
   return (
     <div
-      className="fixed bottom-4 right-4 z-30 w-80 flex flex-col"
+      className="fixed bottom-0 sm:bottom-4 right-0 sm:right-4 z-30 w-full sm:w-80 flex flex-col"
       style={{
         maxHeight: '320px',
         background: 'linear-gradient(180deg, rgba(5,10,22,0.96) 0%, rgba(3,6,14,0.98) 100%)',
@@ -75,7 +75,7 @@ export default function MessageLog() {
         <div className="flex items-center gap-1">
           <button
             onClick={() => setIsMinimized(true)}
-            className="w-5 h-5 flex items-center justify-center text-gray-600 hover:text-cyan-400 cursor-pointer text-[10px]"
+            className="w-10 h-10 flex items-center justify-center text-gray-600 hover:text-cyan-400 active:text-cyan-400 cursor-pointer text-xs"
           >
             _
           </button>
@@ -171,7 +171,7 @@ function FilterTab({
   return (
     <button
       onClick={onClick}
-      className="px-1.5 py-0.5 text-[8px] uppercase tracking-wider font-medium rounded transition-all cursor-pointer"
+      className="px-1.5 py-1 text-xs sm:text-[8px] uppercase tracking-wider font-medium rounded transition-all cursor-pointer min-h-[32px] sm:min-h-0"
       style={{
         background: active ? `${color}22` : 'transparent',
         color: active ? color : '#555',

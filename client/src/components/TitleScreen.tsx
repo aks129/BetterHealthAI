@@ -79,8 +79,8 @@ export default function TitleScreen() {
       <div
         className="absolute"
         style={{
-          width: '320px',
-          height: '320px',
+          width: 'min(320px, 70vw)',
+          height: 'min(320px, 70vw)',
           borderRadius: '50%',
           background: `
             radial-gradient(circle at 35% 35%,
@@ -157,7 +157,7 @@ export default function TitleScreen() {
           NEW HORIZON
         </h1>
         <div
-          className="h-[1px] w-64 mx-auto mt-4"
+          className="h-[1px] w-full max-w-[256px] mx-auto mt-4"
           style={{
             background: 'linear-gradient(90deg, transparent, #00bcd4, transparent)',
           }}
@@ -194,7 +194,7 @@ export default function TitleScreen() {
                 dispatch({ type: 'SET_PHASE', payload: item.phase });
               }
             }}
-            className="relative w-64 py-3 px-8 text-center uppercase tracking-[0.3em] text-sm font-medium transition-all duration-300 border cursor-pointer"
+            className="relative w-full max-w-[256px] py-3 px-8 text-center uppercase tracking-[0.3em] text-sm font-medium transition-all duration-300 border cursor-pointer active:scale-95"
             style={{
               color: hoveredButton === item.key ? '#e0f7fa' : '#80deea',
               borderColor: hoveredButton === item.key ? '#00bcd4' : 'rgba(0,188,212,0.3)',
