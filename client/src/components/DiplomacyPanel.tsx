@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useGame } from '../game/GameContext';
 import { Faction, DiplomacyState } from '../game/types';
+import { audioEngine } from '../game/audio';
 
 const RELATIONSHIP_COLORS: Record<string, string> = {
   allied: '#4ade80',
@@ -186,7 +187,7 @@ export default function DiplomacyPanel() {
         {/* Close button */}
         <div className="flex-shrink-0 px-6 py-3 flex justify-end border-b border-gray-800/30">
           <button
-            onClick={() => dispatch({ type: 'SET_PHASE', payload: 'playing' })}
+            onClick={() => { audioEngine.playSfx('cancel'); audioEngine.setPhase('playing', gameState.playerFactionId); dispatch({ type: 'SET_PHASE', payload: 'playing' }); }}
             className="w-10 h-10 flex items-center justify-center text-gray-500 hover:text-cyan-400 active:text-cyan-400 transition-colors cursor-pointer border border-gray-700 hover:border-cyan-700 rounded"
           >
             ✕

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useGame } from '../game/GameContext';
 import { Faction } from '../game/types';
 import { FACTIONS, getRandomQuote } from '../game/factions';
+import { audioEngine } from '../game/audio';
 
 const STAR_COUNT = 150;
 
@@ -93,6 +94,7 @@ export default function FactionSelect() {
 
   const handleBeginJourney = () => {
     if (selectedId) {
+      audioEngine.playSfx('confirm');
       dispatch({
         type: 'UPDATE_STATE',
         payload: {
@@ -170,7 +172,7 @@ export default function FactionSelect() {
             return (
               <button
                 key={faction.id}
-                onClick={() => setSelectedId(faction.id)}
+                onClick={() => { audioEngine.playSfx('select'); setSelectedId(faction.id); }}
                 onMouseEnter={() => setHoveredId(faction.id)}
                 onMouseLeave={() => setHoveredId(null)}
                 className="flex-shrink-0 w-36 sm:w-48 rounded-lg p-4 transition-all duration-300 cursor-pointer text-left active:scale-[0.98]"

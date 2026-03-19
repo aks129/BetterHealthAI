@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useGame } from '../game/GameContext';
 import { Technology, TechCategory, UnitType } from '../game/types';
+import { audioEngine } from '../game/audio';
 
 type DatalinkTab = 'technologies' | 'units' | 'buildings';
 
@@ -97,7 +98,7 @@ export default function DatalinksPanel() {
         </div>
 
         <button
-          onClick={() => dispatch({ type: 'SET_PHASE', payload: gameState.phase === 'datalinks' ? 'title' : 'playing' })}
+          onClick={() => { audioEngine.playSfx('cancel'); dispatch({ type: 'SET_PHASE', payload: gameState.phase === 'datalinks' ? 'title' : 'playing' }); }}
           className="w-10 h-10 flex items-center justify-center text-gray-500 hover:text-cyan-400 active:text-cyan-400 transition-colors cursor-pointer border border-gray-700 hover:border-cyan-700 rounded"
         >
           ✕

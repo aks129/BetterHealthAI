@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useGame } from '../game/GameContext';
+import { audioEngine } from '../game/audio';
 
 const STAR_COUNT = 200;
 
@@ -189,7 +190,10 @@ export default function TitleScreen() {
             key={item.key}
             onMouseEnter={() => setHoveredButton(item.key)}
             onMouseLeave={() => setHoveredButton(null)}
-            onClick={() => {
+            onClick={async () => {
+              await audioEngine.init();
+              await audioEngine.resume();
+              audioEngine.playSfx('confirm');
               if (item.phase) {
                 dispatch({ type: 'SET_PHASE', payload: item.phase });
               }

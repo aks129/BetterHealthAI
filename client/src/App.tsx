@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { GameProvider, useGame } from './game/GameContext';
 import { processTurn, moveUnit, foundBase, setResearch, buildInBase } from './game/engine';
+import { audioEngine } from './game/audio';
 import TitleScreen from './components/TitleScreen';
 import FactionSelect from './components/FactionSelect';
 import LandingSequence from './components/LandingSequence';
@@ -17,7 +18,25 @@ import VictoryScreen from './components/VictoryScreen';
 function GameApp() {
   const { gameState, dispatch } = useGame();
 
+  // Sync audio phase with game phase
+  useEffect(() => {
+    const phaseMap: Record<string, 'title' | 'faction_select' | 'landing' | 'playing' | 'research' | 'diplomacy' | 'victory'> = {
+      title: 'title',
+      faction_select: 'faction_select',
+      landing: 'landing',
+      playing: 'playing',
+      research: 'research',
+      diplomacy: 'diplomacy',
+      base_management: 'playing',
+      datalinks: 'playing',
+      victory: 'victory',
+    };
+    const audioPhase = phaseMap[gameState.phase] || 'playing';
+    audioEngine.setPhase(audioPhase, gameState.playerFactionId);
+  }, [gameState.phase, gameState.playerFactionId]);
+
   const handleTileClick = (q: number, r: number) => {
+    audioEngine.playSfx('click');
     const selectedUnit = gameState.units.find(u => u.id === gameState.selectedUnitId);
 
     if (selectedUnit && selectedUnit.factionId === gameState.playerFactionId && selectedUnit.movementLeft > 0) {
@@ -46,6 +65,7 @@ function GameApp() {
   };
 
   const handleUnitSelect = (unitId: string) => {
+    audioEngine.playSfx('select');
     dispatch({ type: 'SELECT_UNIT', payload: unitId });
   };
 
@@ -58,17 +78,21 @@ function GameApp() {
     if (gameState.selectedUnitId) {
       const newState = foundBase(gameState, gameState.selectedUnitId);
       if (newState !== gameState) {
+        audioEngine.playSfx('base_founded');
         dispatch({ type: 'UPDATE_STATE', payload: newState });
       }
     }
   };
 
   const handleSetResearch = (techId: string) => {
+    audioEngine.playSfx('confirm');
     const newState = setResearch(gameState, gameState.playerFactionId, techId);
+    audioEngine.setPhase('playing', gameState.playerFactionId);
     dispatch({ type: 'UPDATE_STATE', payload: { ...newState, phase: 'playing' as const } });
   };
 
   const handleBuild = (baseId: string, item: string) => {
+    audioEngine.playSfx('confirm');
     const newState = buildInBase(gameState, baseId, item);
     dispatch({ type: 'UPDATE_STATE', payload: newState });
   };

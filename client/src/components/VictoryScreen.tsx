@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useGame } from '../game/GameContext';
+import { audioEngine } from '../game/audio';
 
 const VICTORY_TYPES: Record<string, { title: string; description: string; color: string; icon: string }> = {
   transcendence: {
@@ -66,6 +67,7 @@ export default function VictoryScreen() {
   const playerTechs = (gameState.researchedTechs[gameState.playerFactionId] || []).length;
 
   useEffect(() => {
+    audioEngine.playSfx('victory_fanfare');
     const t1 = setTimeout(() => setPhase(1), 500);
     const t2 = setTimeout(() => setPhase(2), 2000);
     const t3 = setTimeout(() => setPhase(3), 3500);
@@ -218,7 +220,7 @@ export default function VictoryScreen() {
           }}
         >
           <button
-            onClick={() => dispatch({ type: 'SET_PHASE', payload: 'title' })}
+            onClick={() => { audioEngine.playSfx('click'); dispatch({ type: 'SET_PHASE', payload: 'title' }); }}
             className="px-10 py-3 text-sm uppercase tracking-[0.3em] font-bold transition-all duration-300 cursor-pointer active:scale-95"
             style={{
               background: `${victory.color}22`,
