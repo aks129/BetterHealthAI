@@ -115,8 +115,9 @@ export default function LandingSequence() {
   }, [phase, dispatch]);
 
   const handleSkip = useCallback(() => {
-    dispatch({ type: 'SET_PHASE', payload: 'playing' });
-  }, [dispatch]);
+    const newGame = createNewGame(gameState.playerFactionId || 'gaians', 'medium');
+    dispatch({ type: 'NEW_GAME', payload: { ...newGame, phase: 'playing' } });
+  }, [dispatch, gameState.playerFactionId]);
 
   return (
     <div className="fixed inset-0 bg-black overflow-hidden flex flex-col items-center justify-center select-none">
